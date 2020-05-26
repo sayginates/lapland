@@ -41,7 +41,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "RestResource1",
+						"referenceName": "ibbveriset",
 						"type": "DatasetReference"
 					}
 				],
