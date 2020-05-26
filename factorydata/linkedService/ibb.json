@@ -1,0 +1,13 @@
+{
+	"name": "ibb",
+	"properties": {
+		"description": "ilçe bazında yıllara göre doğalgaz tüketimi",
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://data.ibb.gov.tr/api/3/action/datastore_search?resource_id=d5fe41b0-3848-4548-9ac7-6e4756c3027b&limit=5",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
