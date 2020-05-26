@@ -16,10 +16,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "@dataset().filename",
-					"type": "Expression"
-				},
 				"folderPath": "igdas",
 				"container": "ibbstoragecontainer"
 			},
