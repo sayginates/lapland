@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "AzureBlobStoreJson",
+						"referenceName": "sonuc",
 						"type": "DatasetReference"
 					},
 					"name": "Source"
@@ -14,10 +14,6 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "DelimitedText1",
-						"type": "DatasetReference"
-					},
 					"name": "sink1"
 				}
 			],
@@ -29,7 +25,7 @@
 					"name": "Flatten1"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> Source\nSource select(mapColumn(\n\t\tresult\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 foldDown(unroll(result.records, result.records),\n\tmapColumn(\n\t\t{_id} = result.records.{_id},\n\t\tIlce = result.records.Ilce,\n\t\t{2015} = result.records.{2015.0},\n\t\t{2016} = result.records.{2016.0},\n\t\t{2017} = result.records.{2017.0},\n\t\t{2018} = result.records.{2018.0},\n\t\t{2019} = result.records.{2019.0}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nFlatten1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['output.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+			"script": "source(output(\n\t\thelp as string,\n\t\tsuccess as boolean,\n\t\tresult as (include_total as boolean, resource_id as string, fields as (type as string, id as string)[], records_format as string, records as ({_id} as string, Ilce as string, {2015.0} as string, {2016.0} as string, {2017.0} as string, {2018.0} as string, {2019.0} as string)[], limit as string, {_links} as (start as string, next as string), total as string)\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100) ~> Source\nSource select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 foldDown(unroll(result.records, result.records),\n\tmapColumn(\n\t\t{_id} = result.records.{_id},\n\t\tIlce = result.records.Ilce,\n\t\t{2015} = result.records.{2015.0},\n\t\t{2016} = result.records.{2016.0},\n\t\t{2017} = result.records.{2017.0},\n\t\t{2018} = result.records.{2018.0},\n\t\t{2019} = result.records.{2019.0}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nFlatten1 sink(partitionFileNames:['output.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }
