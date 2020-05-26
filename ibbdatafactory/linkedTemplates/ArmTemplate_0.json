@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
 		},
+		"AzureSynapseAnalytics_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics'"
+		},
 		"ibb_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://data.ibb.gov.tr/api/3/action/datastore_search?resource_id=d5fe41b0-3848-4548-9ac7-6e4756c3027b&limit=50"
@@ -45,6 +49,19 @@
 					"url": "[parameters('ibb_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalytics')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSynapseAnalytics_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -107,24 +124,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ibbveriset')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ibb",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ibb')]"
 			]
 		},
 		{
@@ -231,6 +230,96 @@
 						}
 					}
 				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ibbveriset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ibb",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ibb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DogalgazTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Dogalgaz"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DogalgazCSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "output.csv",
+						"folderPath": "igdas",
+						"container": "ibbstoragecontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
@@ -344,14 +433,78 @@
 						},
 						{
 							"name": "Flatten1"
+						},
+						{
+							"name": "Select2"
+						},
+						{
+							"name": "Flatten2"
 						}
 					],
-					"script": "source(output(\n\t\thelp as string,\n\t\tsuccess as boolean,\n\t\tresult as (include_total as boolean, resource_id as string, fields as (type as string, id as string)[], records_format as string, records as ({_id} as string, Ilce as string, {2015.0} as string, {2016.0} as string, {2017.0} as string, {2018.0} as string, {2019.0} as string)[], limit as string, {_links} as (start as string, next as string), total as string)\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100) ~> Source\nSource select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 foldDown(unroll(result.records, result.records),\n\tmapColumn(\n\t\t{_id} = result.records.{_id},\n\t\tIlce = result.records.Ilce,\n\t\t{2015} = result.records.{2015.0},\n\t\t{2016} = result.records.{2016.0},\n\t\t{2017} = result.records.{2017.0},\n\t\t{2018} = result.records.{2018.0},\n\t\t{2019} = result.records.{2019.0}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nFlatten1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['output.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+					"script": "source(output(\n\t\thelp as string,\n\t\tsuccess as boolean,\n\t\tresult as (include_total as boolean, resource_id as string, fields as (type as string, id as string)[], records_format as string, records as ({_id} as string, Ilce as string, {2015.0} as string, {2016.0} as string, {2017.0} as string, {2018.0} as string, {2019.0} as string)[], limit as string, {_links} as (start as string, next as string), total as string)\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100) ~> Source\nSource select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 foldDown(unroll(result.records, result.records),\n\tmapColumn(\n\t\t{_id} = result.records.{_id},\n\t\tIlce = result.records.Ilce,\n\t\t{2015} = result.records.{2015.0},\n\t\t{2016} = result.records.{2016.0},\n\t\t{2017} = result.records.{2017.0},\n\t\t{2018} = result.records.{2018.0},\n\t\t{2019} = result.records.{2019.0}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nSource select(mapColumn(\n\t\tresult = result.fields\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSelect2 foldDown(unroll(result, result),\n\tmapColumn(\n\t\tresult\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten2\nFlatten1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['output.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/BlobStoreSource')]",
 				"[concat(variables('factoryId'), '/datasets/AzureBlobStoreCsv')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob Store to Snapse Analytic')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink"
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "DogalgazCSV",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DogalgazTable",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DogalgazCSV')]",
+				"[concat(variables('factoryId'), '/datasets/DogalgazTable')]"
 			]
 		},
 		{
