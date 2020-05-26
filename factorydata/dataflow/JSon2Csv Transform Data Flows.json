@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "sonuc",
+						"referenceName": "BlobStoreSource",
 						"type": "DatasetReference"
 					},
 					"name": "Source"
