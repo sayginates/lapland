@@ -13,7 +13,12 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "Destination",
+						"value": "ibbstoragecontainer/igdas/dogalgaz"
+					}
+				],
 				"typeProperties": {
 					"source": {
 						"type": "RestSource",

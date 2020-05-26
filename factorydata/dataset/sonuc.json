@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "dogalgaz",
 				"folderPath": "igdas",
 				"container": "ibbstoragecontainer"
 			}
