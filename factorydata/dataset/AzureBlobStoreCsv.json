@@ -20,6 +20,7 @@
 				"container": "ibbstoragecontainer"
 			},
 			"columnDelimiter": ",",
+			"encodingName": "WINDOWS-1254",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
