@@ -1,6 +1,7 @@
 {
-	"name": "Copy from REST connector into ADLS Gen2",
+	"name": "Copy Data From IBB to Datalake",
 	"properties": {
+		"description": "IBB verisini Azure blob storage'a kopyalar",
 		"activities": [
 			{
 				"name": "CopyData",
