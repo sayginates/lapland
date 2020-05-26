@@ -1,5 +1,5 @@
 {
-	"name": "Json2",
+	"name": "sonuc",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage1",
@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "dogalgaz",
 				"folderPath": "igdas",
 				"container": "ibbstoragecontainer"
 			}
