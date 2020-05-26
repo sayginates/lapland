@@ -1,0 +1,104 @@
+{
+	"name": "Json2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "dogalgaz",
+				"folderPath": "igdas",
+				"container": "ibbstoragecontainer"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"help": {
+					"type": "string"
+				},
+				"success": {
+					"type": "boolean"
+				},
+				"result": {
+					"type": "object",
+					"properties": {
+						"include_total": {
+							"type": "boolean"
+						},
+						"resource_id": {
+							"type": "string"
+						},
+						"fields": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"type": {
+										"type": "string"
+									},
+									"id": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"records_format": {
+							"type": "string"
+						},
+						"records": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"_id": {
+										"type": "integer"
+									},
+									"Ilce": {
+										"type": "string"
+									},
+									"2015.0": {
+										"type": "integer"
+									},
+									"2016.0": {
+										"type": "integer"
+									},
+									"2017.0": {
+										"type": "integer"
+									},
+									"2018.0": {
+										"type": "integer"
+									},
+									"2019.0": {
+										"type": "integer"
+									}
+								}
+							}
+						},
+						"limit": {
+							"type": "integer"
+						},
+						"_links": {
+							"type": "object",
+							"properties": {
+								"start": {
+									"type": "string"
+								},
+								"next": {
+									"type": "string"
+								}
+							}
+						},
+						"total": {
+							"type": "integer"
+						}
+					}
+				}
+			}
+		}
+	}
+}
