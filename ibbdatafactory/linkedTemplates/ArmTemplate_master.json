@@ -11,21 +11,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
 		},
-		"ibbdatalake_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ibbdatalake'"
-		},
-		"HttpServer1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://data.ibb.gov.tr/api/3/action/datastore_search?resource_id=d5fe41b0-3848-4548-9ac7-6e4756c3027b&limit=5"
-		},
 		"ibb_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://data.ibb.gov.tr/api/3/action/datastore_search?resource_id=d5fe41b0-3848-4548-9ac7-6e4756c3027b&limit=5"
-		},
-		"ibbdatalake_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://ibbstorageaccount.dfs.core.windows.net"
+			"defaultValue": "https://data.ibb.gov.tr/api/3/action/datastore_search?resource_id=d5fe41b0-3848-4548-9ac7-6e4756c3027b&limit=50"
 		},
 		"containerUri": {
 			"type": "string",
@@ -57,17 +45,8 @@
 					"AzureBlobStorage1_connectionString": {
 						"value": "[parameters('AzureBlobStorage1_connectionString')]"
 					},
-					"ibbdatalake_accountKey": {
-						"value": "[parameters('ibbdatalake_accountKey')]"
-					},
-					"HttpServer1_properties_typeProperties_url": {
-						"value": "[parameters('HttpServer1_properties_typeProperties_url')]"
-					},
 					"ibb_properties_typeProperties_url": {
 						"value": "[parameters('ibb_properties_typeProperties_url')]"
-					},
-					"ibbdatalake_properties_typeProperties_url": {
-						"value": "[parameters('ibbdatalake_properties_typeProperties_url')]"
 					}
 				}
 			},
