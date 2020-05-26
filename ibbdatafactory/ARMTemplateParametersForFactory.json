@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ibbdatafactory"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"ibbdatalake_accountKey": {
+			"value": ""
+		},
+		"HttpServer1_properties_typeProperties_url": {
+			"value": "https://data.ibb.gov.tr/api/3/action/datastore_search?resource_id=d5fe41b0-3848-4548-9ac7-6e4756c3027b&limit=5"
+		},
+		"ibb_properties_typeProperties_url": {
+			"value": "https://data.ibb.gov.tr/api/3/action/datastore_search?resource_id=d5fe41b0-3848-4548-9ac7-6e4756c3027b&limit=5"
+		},
+		"ibbdatalake_properties_typeProperties_url": {
+			"value": "https://ibbstorageaccount.dfs.core.windows.net"
+		}
+	}
+}
