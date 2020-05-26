@@ -48,7 +48,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Json1",
+						"referenceName": "AzureBlobStoreJson",
 						"type": "DatasetReference"
 					}
 				]
