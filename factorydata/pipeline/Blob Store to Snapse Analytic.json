@@ -29,7 +29,42 @@
 					"sink": {
 						"type": "SqlDWSink"
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Ilce",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Ilce",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "yil",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Yil",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Tuketim",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Tuketim",
+									"type": "Int32"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
